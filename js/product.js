@@ -1,6 +1,6 @@
 // je récupère l'id dans l'URL et je le stocke dans une variable 
 
-const urlCanape = "http://localhost:3000/api/products/${107fb5b75607497b96722bda5b504926}";
+const urlCanape = "http://localhost:3000/api/products/107fb5b75607497b96722bda5b504926";
 const url = new URL(urlCanape);
 const id = url.searchParams.get("id");
 console.log(id);
@@ -11,7 +11,7 @@ const idCanape = document.getElementsByClassName('items');
 
 // je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
 
-fetch("http://localhost:3000/api/products/${id}")
+fetch("http://localhost:3000/api/products/" + id)
     .then(function (res) {
         if (res.ok) {
             return res.json();
