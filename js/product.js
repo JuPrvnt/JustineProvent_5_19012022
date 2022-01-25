@@ -1,13 +1,11 @@
 // je récupère l'id dans l'URL et je le stocke dans une variable 
 
-const urlCanape = "http://localhost:3000/api/products/107fb5b75607497b96722bda5b504926";
-const url = new URL(urlCanape);
-const id = url.searchParams.get("id");
-console.log(id);
+let params = (new URL(document.location)).searchParams;
+let id = params.get('id');
 
 // je récupère l'endroit où je veux afficher mes produits
 
-const idCanape = document.getElementsByClassName('items');
+const idCanape = document.getElementsByClassName('item');
 
 // je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
 
@@ -62,7 +60,7 @@ fetch("http://localhost:3000/api/products/" + id)
                 </article>
                 `;
         ;
-        idCanape.insertAdjacentHTML('afterbegin', ficheCanape);
+        idCanape[0].insertAdjacentHTML('afterbegin', ficheCanape);
     }).catch((error) => {
         console.log(error)
     });
