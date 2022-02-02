@@ -82,8 +82,17 @@ fetch("http://localhost:3000/api/products/" + id)
             if (quantitySelected.value > 0 && quantitySelected.value < 100) {
                 // console.log(quantitySelected);
 
-                let productAdded = {id, colorSelected, quantitySelected};
-                console.log(productAdded);
+                // let productAdded = {id, colorSelected, quantitySelected};
+                // console.log(productAdded);
+
+                let productAdded = {
+                    _id: id,
+                    colors: colorSelected.value, 
+                    quantity: quantitySelected.value, 
+                };
+
+                let productInCart = JSON.stringify(productAdded);
+                localStorage.setItem("canape", productInCart);
 
             } else {
                 throw new Error("Veuillez sélectionner une quantité et une couleur.");
