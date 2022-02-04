@@ -5,15 +5,13 @@ const produits = document.getElementById('items');
 // je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
 
 fetch("http://localhost:3000/api/products/")
-    .then(function (res) {
+    .then((res) => {
         if (res.ok) {
             return res.json();
-        } else {
-            throw new Error("Impossible de joindre l'API !");
-        }
+        } 
+        throw new Error(res.statusText);
     })
-    .then(function (value) {
-        console.log(value);
+    .then((value) => {
         let renduProduit = "";
         value.forEach(element => {
             renduProduit += `
@@ -27,6 +25,7 @@ fetch("http://localhost:3000/api/products/")
                 `;
         });
         produits.insertAdjacentHTML('afterbegin', renduProduit);
+    
     }).catch((error) => {
-        console.log(error)
+        console.error(error);
     });
