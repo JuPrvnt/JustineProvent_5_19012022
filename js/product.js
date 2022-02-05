@@ -73,10 +73,14 @@ fetch("http://localhost:3000/api/products/" + id)
                         // si la je ne trouve pas le même canapé dans le localStorage, j'ajoute quand même ce nouveau canapé
                         // Récuperer la variable localstorage actuel et y ajouter le nouveau produit
                         // Ajouter un objet dans un array -> internet
-                        let newProductAdded = [id, colorSelected.value, quantitySelected.value];
-                        canapeLocalStorage.push.apply(newProductAdded);
+                        let newProductAdded = {
+                            _id: id,
+                            colors: colorSelected.value,
+                            quantity: parseInt(quantitySelected.value)
+                        };
+                        canapeLocalStorage.push(newProductAdded);
                         // Faire le set item avec le nouveau local storage
-                        localStorage.setItem("newcanape", JSON.stringify(newProductAdded));
+                        localStorage.setItem("canape", JSON.stringify(canapeLocalStorage));
                     }
                 } else {
                     let productAdded = [{
@@ -99,12 +103,3 @@ fetch("http://localhost:3000/api/products/" + id)
     .catch((error) => {
         console.log(error)
     });
-
-
-/*
-    let productAdded = {
-        _id: id,
-        colors: colorSelected.value, 
-        quantity: quantitySelected.value, 
-    };
-*/
