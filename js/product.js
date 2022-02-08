@@ -56,7 +56,6 @@ fetch("http://localhost:3000/api/products/" + id)
         addToCart.addEventListener('click', (event) => {
             event.preventDefault();
             if (colorSelected.value && quantitySelected.value > 0 && quantitySelected.value < 100) {
-                // let productAdded = {id, colorSelected, quantitySelected};
                 // console.log(productAdded);
                 let canapeLocalStorage = JSON.parse(localStorage.getItem("canape"));
 
