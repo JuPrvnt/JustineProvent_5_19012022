@@ -3,24 +3,36 @@ let article = document.querySelector("article");
 // console.log(article);
 
 // Depuis la page Panier, récupérer le panier (l’array) via localStorage
-let canapeSelected = JSON.parse(localStorage.getItem('canape'));
-// console.log(canapeSelected);
+let productInCart = JSON.parse(localStorage.getItem('canape'));
+// console.log(productInCart);
 
 // Je parcours l’array de mon localStorage
-let productInCart = JSON.parse(localStorage.getItem('canape'));
+// Je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
+
 
 for (let canape of productInCart) {
-    
-// Je créé et insére les éléments du localStorage dans la page Panier
-canapeAfficher = `
+  // console.log(canape._id);
+  let idProductInCart = canape._id;
+  // console.log(idProductInCart);
+
+  fetch("http://localhost:3000/api/products/" + idProductInCart)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw new Error(res.statusText);
+    })
+    .then((value) => {
+      // Je créé et insére les éléments du localStorage dans la page Panier
+      const canapeAfficher = `
                 <div class="cart__item__img">
-                <img src="${canape.imageURL}" alt="Photographie d'un canapé">
+                <img src="${value.imageUrl}" alt="Photographie d'un canapé">
                 </div>
                 <div class="cart__item__content">
                 <div class="cart__item__content__description">
-                    <h2>Nom du produit</h2>
+                    <h2>${value.name}</h2>
                     <p>${canape.colors}</p>
-                    <p>42,00 €</p>
+                    <p>${value.price}</p>
                 </div>
                 <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
@@ -33,9 +45,11 @@ canapeAfficher = `
                 </div>
                 </div>
             `;
-article.insertAdjacentHTML('afterbegin', canapeAfficher);
+      article.insertAdjacentHTML('afterbegin', canapeAfficher);
 
-console.log(canape);
+      // console.log(canape);
+    }
+    )
 }
 
 /*

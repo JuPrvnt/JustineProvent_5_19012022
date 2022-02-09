@@ -75,7 +75,7 @@ fetch("http://localhost:3000/api/products/" + id)
                         let newProductAdded = {
                             _id: id,
                             colors: colorSelected.value,
-                            quantity: parseInt(quantitySelected.value)
+                            quantity: parseInt(quantitySelected.value),
                         };
                         canapeLocalStorage.push(newProductAdded);
                         // Faire le set item avec le nouveau local storage
@@ -85,7 +85,7 @@ fetch("http://localhost:3000/api/products/" + id)
                     let productAdded = [{
                         _id: id,
                         colors: colorSelected.value,
-                        quantity: parseInt(quantitySelected.value)
+                        quantity: parseInt(quantitySelected.value),
                     }];
 
                     let productInCart = JSON.stringify(productAdded);
