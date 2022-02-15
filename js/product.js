@@ -69,7 +69,7 @@ fetch("http://localhost:3000/api/products/" + id)
                         const canapeDouble = JSON.stringify(canapeLocalStorage);
                         localStorage.setItem("canape", canapeDouble);
                     } else { 
-                        // si la je ne trouve pas le même canapé dans le localStorage, j'ajoute quand même ce nouveau canapé
+                        // si je ne trouve pas le même canapé dans le localStorage, j'ajoute quand même ce nouveau canapé
                         // Récuperer la variable localstorage actuel et y ajouter le nouveau produit
                         // Ajouter un objet dans un array -> internet
                         let newProductAdded = {

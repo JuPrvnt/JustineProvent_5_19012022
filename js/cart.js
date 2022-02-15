@@ -8,15 +8,36 @@ let productInCart = JSON.parse(localStorage.getItem('canape'));
 
 // Je déclare toutes mes variables
 let canapeAfficher = "";
-let priceProductInCart = 0;
-let quantityProductInCart = 0;
-let totalQuantity = document.getElementById("totalQuantity");
-let totalPrice = document.getElementById("totalPrice");
-// let deleteCart = document.getElementsByClassName("deleteItem");
+
+// Je récupère le localStorage existant et j'ajoute des produits directement depuis la page panier
+function displayCart() {
+  let productsInCart = JSON.parse(localStorage.getItem('canape'));
+  let priceProductInCart = 0;
+  let quantityProductInCart = 0;
+  let totalQuantity = document.getElementById("totalQuantity");
+  let totalPrice = document.getElementById("totalPrice");
+  for (let canape of productsInCart) {
+    let idProductInCart = canape._id;
+    fetch("http://localhost:3000/api/products/" + idProductInCart)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error(res.statusText);
+      })
+      // Je créé et insére les éléments du localStorage dans la page Panier
+      .then((value) => {
+        priceProductInCart = priceProductInCart + (value.price * canape.quantity);
+        totalPrice.innerHTML = priceProductInCart;
+
+        quantityProductInCart = quantityProductInCart + parseInt(canape.quantity);
+        totalQuantity.innerHTML = quantityProductInCart;
+      })
+  }
+}
 
 // Je parcours l’array de mon localStorage
 // Je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
-
 for (let canape of productInCart) {
   // console.log(canape._id);
   let idProductInCart = canape._id;
@@ -55,36 +76,79 @@ for (let canape of productInCart) {
                 </article> 
             `;
       article.insertAdjacentHTML('afterbegin', canapeAfficher);
-      // console.log(canape);
 
       // J'affiche le total en quantité et en prix
-      priceProductInCart += value.price * canape.quantity;
-      totalPrice.innerHTML = priceProductInCart;
+      displayCart();
 
-      quantityProductInCart += canape.quantity;
-      totalQuantity.innerHTML = quantityProductInCart;
-
-      // Je récupère le localStorage existant et j'ajoute des produits directement depuis la page panier
-
-      let newQuantityInCart = document.getElementById("totalQuantity");
-      let newPriceInCart = document.getElementById("totalPrice");
-
-      document.querySelectorAll("input").forEach((element) => {
+      // J'ajoute ou supprime des canapés au click sur l'input
+      document.querySelectorAll("input").forEach((element, index) => {
         element.addEventListener("change", (e) => {
           e.preventDefault();
-          let quantityAddedFromCart = parseInt(e.target.value);
-          let sumQuantityInCart = canape.quantity + quantityAddedFromCart;
-          newQuantityInCart.textContent = `${sumQuantityInCart}`;
-
-          let sumPriceInCart = value.price * quantityAddedFromCart;
-          newPriceInCart.textContent = `${sumPriceInCart}`;
+          console.log(index);
+          // Si l'event se passe => la quantité a été modifiée, 
+          // récupérer le canape du localStorage qui a la même ID et 
+          // remplacer par la nouvelle quantité
+          let newQuantity = document.getElementsByClassName("itemQuantity");
+          productInCart[index].quantity = newQuantity[index].value;
+          localStorage.setItem('canape', JSON.stringify(productInCart));
+          // J'affiche le total en quantité et en prix
+          displayCart();
         })
       })
     })
 }
 
 
+
+
+
+
+
+
+
+
 /*
+if (e) {
+  let canapeLocalStorage = JSON.parse(localStorage.getItem("canape"));
+  let quantityUpdateInCart = parseInt(e.target.value);
+  let newCanapeUpdate = {
+    _id: idProductInCart,
+    colors: canape.colors,
+    quantity: parseInt(quantityUpdateInCart),
+  };
+  canapeLocalStorage.push(newCanapeUpdate);
+  localStorage.setItem("canape", JSON.stringify(canapeLocalStorage));
+  
+  //localStorage.setItem("canapechange", JSON.stringify(newCanapeUpdate));
+  //let canapeCompile = canape.concat(newCanapeUpdate);
+  //localStorage.setItem("canapeCompile", JSON.stringify(canapeCompile));
+
+  //let quantityInLocalStorage = canape.quantity;
+  
+
+  // let quantityAddedFromCart = parseInt(e.target.value);
+  // let sumQuantityInCart = canape.quantity + quantityAddedFromCart;
+  // newQuantityInCart.textContent = `${sumQuantityInCart}`;
+
+  // let sumPriceInCart = value.price * quantityAddedFromCart;
+  // newPriceInCart.textContent = `${sumPriceInCart}`;
+}
+*/
+
+
+
+/*
+// Je supprime les éléments au click du bouton supprimer du panier
+let buttonToEmptyCart = document.getElementsByClassName("deleteItem");
+console.log(buttonToEmptyCart);
+
+for (let s = 0; 1 < buttonToEmptyCart.length; s++) {
+  buttonToEmptyCart[s].addEventListener("click", (event) => {
+    event.preventDefault();
+
+    let idSelectedToSupress = productInCart[s].idProductInCart;
+  })
+}
     // Je supprime du panier au click du bouton "supprimer"
     .then(() => {
       deleteCart.addEventListener('click', (event) => {
