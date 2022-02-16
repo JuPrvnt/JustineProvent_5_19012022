@@ -7,7 +7,7 @@ let productInCart = JSON.parse(localStorage.getItem('canape'));
 // console.log(productInCart);
 
 // Je déclare toutes mes variables
-let canapeAfficher = "";
+let displayCanape = "";
 
 // Je récupère le localStorage existant et j'ajoute des produits directement depuis la page panier
 function displayCart() {
@@ -52,7 +52,7 @@ for (let canape of productInCart) {
     })
     // Je créé et insére les éléments du localStorage dans la page Panier
     .then((value) => {
-      canapeAfficher = `
+      displayCanape = `
                 <article class="cart__item" data-id="${value._id}" data-color="${value.colors}">
                 <div class="cart__item__img">
                 <img src="${value.imageUrl}" alt="Photographie d'un canapé">
@@ -75,7 +75,7 @@ for (let canape of productInCart) {
                 </div>
                 </article> 
             `;
-      article.insertAdjacentHTML('afterbegin', canapeAfficher);
+      article.insertAdjacentHTML('afterbegin', displayCanape);
 
       // J'affiche le total en quantité et en prix
       displayCart();
@@ -84,8 +84,7 @@ for (let canape of productInCart) {
       document.querySelectorAll("input").forEach((element, index) => {
         element.addEventListener("change", (e) => {
           e.preventDefault();
-          console.log(index);
-          // Si l'event se passe => la quantité a été modifiée, 
+          // Si l'event se passe => la quantité a été modifiée : 
           // récupérer le canape du localStorage qui a la même ID et 
           // remplacer par la nouvelle quantité
           let newQuantity = document.getElementsByClassName("itemQuantity");
@@ -95,8 +94,89 @@ for (let canape of productInCart) {
           displayCart();
         })
       })
+
+      // Au click du bouton supprimer, je retire le produit du localStorage
+      let deleteCart = document.querySelectorAll(".deleteItem");
+
+      deleteCart.forEach((el, index) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          // Si l'event se passe => le click sur "supprimer" : 
+          // supprimer le canape du localStorage qui a la même ID et 
+          productInCart.splice(index, 1);
+          localStorage.setItem('canape', JSON.stringify(productInCart))
+          // supprimer le bloc HTML <article> du produit et
+          let selectProductToDelete = deleteCart[index].closest('.cart__item')
+          selectProductToDelete.remove();
+          // recalculer le total de produits et de prix
+          displayCart();
+        })
+      })
+
     })
 }
+
+/*
+
+
+      function removeItem() {
+        document.getElementsByClassName("deleteItem").forEach((el, index) => {
+          el.addEventListener("click", (e) => {
+            e.preventDefault();
+            // Dans le DOM
+            let selectProductToDelete = deleteCart[index].closest('.cart__item')
+            selectProductToDelete.remove()
+            // Dans le local storage
+            productInCart.splice(index, 1)
+            localStorage.setItem('canape', JSON.stringify(productInCart))
+          })
+        })
+      }
+
+// FORMULAIRE
+
+// Validation des données du formulaire
+
+let inputFirstName = document.getElementById("firstName");
+let inputLastName = document.getElementById("lastName");
+let inputAddress = document.getElementById("address");
+let inputCity = document.getElementById("city");
+let inputEmail = document.getElementById("email");
+
+// J'envoie la commande
+
+let informationsToOrder = {
+  "contact": {
+    "firstName": document.getElementById("firstName"),
+    "lastName": document.getElementById("lastName"),
+    "address": document.getElementById("address"),
+    "city": document.getElementById("city"),
+    "email": document.getElementById("email"),
+  },
+  "products": [
+
+  ]
+};
+
+let urlOrder = "http://localhost:3000/api/products/order";
+
+let order = {
+  method: 'POST',
+  body: JSON.stringify(informationsToOrder)
+};
+
+// J'envoie les informations à l'API
+
+fetch(urlOrder, order)
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    throw new Error(res.statusText);
+    console.log(res);
+  })
+
+*/
 
 
 
