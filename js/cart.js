@@ -81,7 +81,7 @@ for (let canape of productInCart) {
       displayCart();
 
       // J'ajoute ou supprime des canapés au click sur l'input
-      document.querySelectorAll("input").forEach((element, index) => {
+      document.querySelectorAll(".itemQuantity").forEach((element, index) => {
         element.addEventListener("change", (e) => {
           e.preventDefault();
           // Si l'event se passe => la quantité a été modifiée : 
@@ -115,28 +115,98 @@ for (let canape of productInCart) {
 
     })
 }
-
-/*
-
 // FORMULAIRE
 
 // Validation des données du formulaire
 
-let inputFirstName = document.getElementById("firstName");
-let inputLastName = document.getElementById("lastName");
-let inputAddress = document.getElementById("address");
-let inputCity = document.getElementById("city");
-let inputEmail = document.getElementById("email");
+// Quand je clique sur le bouton "commander"
+// si tous mes champs sont remplis 
+// et que les données sont validées 
+// alors, j'envoie mon formulaire
+
+let regexLetters = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+let regexNumbers = /^[a-zA-Z\-1-9]+$/;
+let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+let orderSubmit = document.getElementById('order');
+
+orderSubmit.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  function validationFirstName() {
+    let inputFirstName = document.getElementById('firstName').value;
+    let messageFirstName = document.getElementById('firstNameErrorMsg');
+    if (regexLetters.test(inputFirstName) == true) {
+      messageFirstName.innerText = "Prénom valide.";
+    } else if (inputFirstName == "") {
+      messageFirstName.innerText = "Merci d'entrer un prénom.";
+    } else if (regexNumbers.test(inputFirstName) == false) {
+      messageFirstName.innerText = "Le prénom doit comporter des lettres et des tirets uniquement.";
+    }
+  }
+
+  function validationLastName() {
+    let inputLastName = document.getElementById('lastName').value;
+    let messageLastName = document.getElementById('lastNameErrorMsg');
+    if (regexLetters.test(inputLastName) == true) {
+      messageLastName.innerText = "Nom valide.";
+    } else if (inputLastName == "") {
+      messageLastName.innerText = "Merci d'entrer un nom.";
+    } else if (regexNumbers.test(inputLastName) == false) {
+      messageLastName.innerText = "Le nom doit comporter des lettres et des tirets uniquement.";
+    }
+  }
+
+  function validationAddress() {
+    let inputAddress = document.getElementById('address').value;
+    let messageAddress = document.getElementById('addressErrorMsg');
+    if ((regexLetters.test(inputAddress) == true) && (regexNumbers.test(inputAddress) == true)) {
+      messageAddress.innerText = "Adresse valide.";
+    } else if (inputAddress == "") {
+      messageAddress.innerText = "Merci d'entrer une adresse.";
+    }
+  }
+
+  function validationCity() {
+    let inputCity = document.getElementById('city').value;
+    let messageCity = document.getElementById('cityErrorMsg');
+    if (regexLetters.test(inputCity) == true) {
+      messageCity.innerText = "Ville valide.";
+    } else if (inputCity == "") {
+      messageCity.innerText = "Merci d'entrer une ville.";
+    }
+  }
+
+  function validationEmail() {
+    let inputEmail = document.getElementById('email').value;
+    let messageEmail = document.getElementById('emailErrorMsg');
+    if (regexEmail.test(inputEmail) == true) {
+      messageEmail.innerText = "Email valide.";
+    } else if (inputEmail == "") {
+      messageEmail.innerText = "Merci d'entrer un email.";
+    }
+  }
+
+  validationFirstName();
+  validationLastName();
+  validationAddress();
+  validationCity();
+  validationEmail();
+
+})
+
+
+/*
 
 // J'envoie la commande
 
 let informationsToOrder = {
   "contact": {
-    "firstName": document.getElementById("firstName"),
-    "lastName": document.getElementById("lastName"),
-    "address": document.getElementById("address"),
-    "city": document.getElementById("city"),
-    "email": document.getElementById("email"),
+    "firstName": inputFirstName,
+    "lastName": inputLastName,
+    "address": inputAddress,
+    "city": inputCity,
+    "email": inputEmail,
   },
   "products": [
 
