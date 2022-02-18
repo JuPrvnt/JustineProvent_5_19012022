@@ -240,26 +240,29 @@ for (let canape of productInCart) {
           city: inputCity,
           email: inputEmail,
         },
-      };
-
-      let allInformationsToOrder = {
-        params1: informationsForm,
-        params2: productIdToBuy,
+        products: productIdToBuy,
       };
 
       let orderToSend = {
         method: "POST",
-        body: JSON.stringify(allInformationsToOrder),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(informationsForm),
       };
+
+      // J'envoie les informations à l'API
+
+      fetch("http://localhost:3000/api/products/order", orderToSend)
+        .then((response) => response.json())
+
+        .then(
+          (jsonOrder) =>
+            (window.location = `../html/confirmation.html?id=${jsonOrder.orderId}`)
+        )
+
+        .then(localStorage.clear());
     }
-
-    // J'envoie les informations à l'API
-
-    fetch("http://localhost:3000/api/products/order", orderToSend)
-      .then((response) => response.json())
-
-      .then((response) => {
-        // Do something with response.
-      });
   });
 }

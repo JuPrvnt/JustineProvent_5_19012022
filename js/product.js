@@ -70,7 +70,11 @@ fetch("http://localhost:3000/api/products/" + id)
           });
 
           if (res >= 0) {
-            if (canapeLocalStorage.quantity + quantitySelected < 100) {
+            if (
+              canapeLocalStorage[res].quantity +
+                parseInt(quantitySelected.value) <=
+              100
+            ) {
               canapeLocalStorage[res].quantity += parseInt(
                 quantitySelected.value
               );
