@@ -1,9 +1,9 @@
 // Je récupère l'endroit où je veux afficher mes produits au panier
-let article = document.getElementById('cart__items');
+let article = document.getElementById("cart__items");
 // console.log(article);
 
 // Depuis la page Panier, récupérer le panier (l’array) via localStorage
-let productInCart = JSON.parse(localStorage.getItem('canape'));
+let productInCart = JSON.parse(localStorage.getItem("canape"));
 // console.log(productInCart);
 
 // Je déclare toutes mes variables
@@ -11,7 +11,7 @@ let displayCanape = "";
 
 // Je récupère le localStorage existant et j'ajoute des produits directement depuis la page panier
 function displayCart() {
-  let productsInCart = JSON.parse(localStorage.getItem('canape'));
+  let productsInCart = JSON.parse(localStorage.getItem("canape"));
   let priceProductInCart = 0;
   let quantityProductInCart = 0;
   let totalQuantity = document.getElementById("totalQuantity");
@@ -27,12 +27,13 @@ function displayCart() {
       })
       // Je créé et insére les éléments du localStorage dans la page Panier
       .then((value) => {
-        priceProductInCart = priceProductInCart + (value.price * canape.quantity);
+        priceProductInCart = priceProductInCart + value.price * canape.quantity;
         totalPrice.innerHTML = priceProductInCart;
 
-        quantityProductInCart = quantityProductInCart + parseInt(canape.quantity);
+        quantityProductInCart =
+          quantityProductInCart + parseInt(canape.quantity);
         totalQuantity.innerHTML = quantityProductInCart;
-      })
+      });
   }
 }
 
@@ -75,7 +76,7 @@ for (let canape of productInCart) {
                 </div>
                 </article> 
             `;
-      article.insertAdjacentHTML('afterbegin', displayCanape);
+      article.insertAdjacentHTML("afterbegin", displayCanape);
 
       // J'affiche le total en quantité et en prix
       displayCart();
@@ -84,16 +85,16 @@ for (let canape of productInCart) {
       document.querySelectorAll(".itemQuantity").forEach((element, index) => {
         element.addEventListener("change", (e) => {
           e.preventDefault();
-          // Si l'event se passe => la quantité a été modifiée : 
-          // récupérer le canape du localStorage qui a la même ID et 
+          // Si l'event se passe => la quantité a été modifiée :
+          // récupérer le canape du localStorage qui a la même ID et
           // remplacer par la nouvelle quantité
           let newQuantity = document.getElementsByClassName("itemQuantity");
-          productInCart[index].quantity = newQuantity[index].value;
-          localStorage.setItem('canape', JSON.stringify(productInCart));
+          productInCart[index].quantity = parseInt(newQuantity[index].value);
+          localStorage.setItem("canape", JSON.stringify(productInCart));
           // J'affiche le total en quantité et en prix
           displayCart();
-        })
-      })
+        });
+      });
 
       // Au click du bouton supprimer, je retire le produit du localStorage
       let deleteCart = document.querySelectorAll(".deleteItem");
@@ -101,90 +102,103 @@ for (let canape of productInCart) {
       deleteCart.forEach((el, index) => {
         el.addEventListener("click", (e) => {
           e.preventDefault();
-          // Si l'event se passe => le click sur "supprimer" : 
-          // supprimer le canape du localStorage qui a la même ID et 
+          // Si l'event se passe => le click sur "supprimer" :
+          // supprimer le canape du localStorage qui a la même ID et
           productInCart.splice(index, 1);
-          localStorage.setItem('canape', JSON.stringify(productInCart))
+          localStorage.setItem("canape", JSON.stringify(productInCart));
           // supprimer le bloc HTML <article> du produit et
-          let selectProductToDelete = deleteCart[index].closest('.cart__item')
+          let selectProductToDelete = deleteCart[index].closest(".cart__item");
           selectProductToDelete.remove();
           // recalculer le total de produits et de prix
           displayCart();
-        })
-      })
-
-    })
+        });
+      });
+    });
 }
 // FORMULAIRE
 
 // Validation des données du formulaire
 
 // Quand je clique sur le bouton "commander"
-// si tous mes champs sont remplis 
-// et que les données sont validées 
+// si tous mes champs sont remplis
+// et que les données sont validées
 // alors, j'envoie mon formulaire
 
-let regexLetters = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-let regexNumbers = /^[a-zA-Z\-1-9]+$/;
-let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+let regexLetters =
+  /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+let regexAddress =
+  /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'1-9]+$/u;
+let regexEmail =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-let orderSubmit = document.getElementById('order');
+let orderSubmit = document.getElementById("order");
 
-orderSubmit.addEventListener('click', (event) => {
+orderSubmit.addEventListener("click", (event) => {
   event.preventDefault();
 
   function validationFirstName() {
-    let inputFirstName = document.getElementById('firstName').value;
-    let messageFirstName = document.getElementById('firstNameErrorMsg');
+    let inputFirstName = document.getElementById("firstName").value;
+    let messageFirstName = document.getElementById("firstNameErrorMsg");
     if (regexLetters.test(inputFirstName) == true) {
       messageFirstName.innerText = "Prénom valide.";
     } else if (inputFirstName == "") {
       messageFirstName.innerText = "Merci d'entrer un prénom.";
-    } else if (regexNumbers.test(inputFirstName) == false) {
-      messageFirstName.innerText = "Le prénom doit comporter des lettres et des tirets uniquement.";
+    } else {
+      messageFirstName.innerText =
+        "Le prénom doit comporter des lettres et des tirets uniquement.";
     }
   }
 
   function validationLastName() {
-    let inputLastName = document.getElementById('lastName').value;
-    let messageLastName = document.getElementById('lastNameErrorMsg');
+    let inputLastName = document.getElementById("lastName").value;
+    let messageLastName = document.getElementById("lastNameErrorMsg");
     if (regexLetters.test(inputLastName) == true) {
       messageLastName.innerText = "Nom valide.";
     } else if (inputLastName == "") {
       messageLastName.innerText = "Merci d'entrer un nom.";
-    } else if (regexNumbers.test(inputLastName) == false) {
-      messageLastName.innerText = "Le nom doit comporter des lettres et des tirets uniquement.";
+    } else {
+      messageLastName.innerText =
+        "Le nom doit comporter des lettres et des tirets uniquement.";
     }
   }
 
   function validationAddress() {
-    let inputAddress = document.getElementById('address').value;
-    let messageAddress = document.getElementById('addressErrorMsg');
-    if ((regexLetters.test(inputAddress) == true) && (regexNumbers.test(inputAddress) == true)) {
+    let inputAddress = document.getElementById("address").value;
+    let messageAddress = document.getElementById("addressErrorMsg");
+    if (regexAddress.test(inputAddress) == true) {
       messageAddress.innerText = "Adresse valide.";
     } else if (inputAddress == "") {
       messageAddress.innerText = "Merci d'entrer une adresse.";
+    } else {
+      messageAddress.innerText =
+        "Le nom doit comporter des lettres et des tirets uniquement.";
     }
   }
 
   function validationCity() {
-    let inputCity = document.getElementById('city').value;
-    let messageCity = document.getElementById('cityErrorMsg');
+    let inputCity = document.getElementById("city").value;
+    let messageCity = document.getElementById("cityErrorMsg");
     if (regexLetters.test(inputCity) == true) {
       messageCity.innerText = "Ville valide.";
     } else if (inputCity == "") {
       messageCity.innerText = "Merci d'entrer une ville.";
+    } else {
+      messageCity.innerText = "Merci d'entrer des caractères valides.";
     }
   }
 
   function validationEmail() {
-    let inputEmail = document.getElementById('email').value;
-    let messageEmail = document.getElementById('emailErrorMsg');
+    let inputEmail = document.getElementById("email").value;
+    let messageEmail = document.getElementById("emailErrorMsg");
     if (regexEmail.test(inputEmail) == true) {
       messageEmail.innerText = "Email valide.";
+      return true;
     } else if (inputEmail == "") {
-      messageEmail.innerText = "Merci d'entrer un email.";
+      messageEmail.innerText = "Merci d'entrer une ville.";
+    } else {
+      messageEmail.innerText = "Merci d'entrer des caractères valides.";
     }
+    return false;
   }
 
   validationFirstName();
@@ -192,9 +206,7 @@ orderSubmit.addEventListener('click', (event) => {
   validationAddress();
   validationCity();
   validationEmail();
-
-})
-
+});
 
 /*
 
