@@ -114,133 +114,152 @@ for (let canape of productInCart) {
         });
       });
     });
-}
-// FORMULAIRE
 
-// Validation des données du formulaire
+  // Je parcours à nouveau l’array de mon localStorage
+  // une fois les quantités modifiées depuis le panier
+  // Je récupère les ID de ces produits que je stock dans des array
+  let productIdToBuy = [canape._id];
+  // console.log(productIdToBuy);
 
-// Quand je clique sur le bouton "commander"
-// si tous mes champs sont remplis
-// et que les données sont validées
-// alors, j'envoie mon formulaire
+  // FORMULAIRE
 
-let regexLetters =
-  /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-let regexAddress =
-  /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'1-9]+$/u;
-let regexEmail =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // Validation des données du formulaire
 
-let orderSubmit = document.getElementById("order");
+  // Quand je clique sur le bouton "commander"
+  // si tous mes champs sont remplis
+  // et que les données sont validées
+  // alors, j'envoie mon formulaire
 
-orderSubmit.addEventListener("click", (event) => {
-  event.preventDefault();
+  let regexLetters =
+    /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+  let regexAddress =
+    /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'1-9]+$/u;
+  let regexEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  function validationFirstName() {
+  let orderSubmit = document.getElementById("order");
+
+  orderSubmit.addEventListener("click", (event) => {
+    event.preventDefault();
+
     let inputFirstName = document.getElementById("firstName").value;
-    let messageFirstName = document.getElementById("firstNameErrorMsg");
-    if (regexLetters.test(inputFirstName) == true) {
-      messageFirstName.innerText = "Prénom valide.";
-    } else if (inputFirstName == "") {
-      messageFirstName.innerText = "Merci d'entrer un prénom.";
-    } else {
-      messageFirstName.innerText =
-        "Le prénom doit comporter des lettres et des tirets uniquement.";
-    }
-  }
-
-  function validationLastName() {
     let inputLastName = document.getElementById("lastName").value;
-    let messageLastName = document.getElementById("lastNameErrorMsg");
-    if (regexLetters.test(inputLastName) == true) {
-      messageLastName.innerText = "Nom valide.";
-    } else if (inputLastName == "") {
-      messageLastName.innerText = "Merci d'entrer un nom.";
-    } else {
-      messageLastName.innerText =
-        "Le nom doit comporter des lettres et des tirets uniquement.";
-    }
-  }
-
-  function validationAddress() {
     let inputAddress = document.getElementById("address").value;
-    let messageAddress = document.getElementById("addressErrorMsg");
-    if (regexAddress.test(inputAddress) == true) {
-      messageAddress.innerText = "Adresse valide.";
-    } else if (inputAddress == "") {
-      messageAddress.innerText = "Merci d'entrer une adresse.";
-    } else {
-      messageAddress.innerText =
-        "Le nom doit comporter des lettres et des tirets uniquement.";
-    }
-  }
-
-  function validationCity() {
     let inputCity = document.getElementById("city").value;
-    let messageCity = document.getElementById("cityErrorMsg");
-    if (regexLetters.test(inputCity) == true) {
-      messageCity.innerText = "Ville valide.";
-    } else if (inputCity == "") {
-      messageCity.innerText = "Merci d'entrer une ville.";
-    } else {
-      messageCity.innerText = "Merci d'entrer des caractères valides.";
-    }
-  }
-
-  function validationEmail() {
     let inputEmail = document.getElementById("email").value;
-    let messageEmail = document.getElementById("emailErrorMsg");
-    if (regexEmail.test(inputEmail) == true) {
-      messageEmail.innerText = "Email valide.";
-      return true;
-    } else if (inputEmail == "") {
-      messageEmail.innerText = "Merci d'entrer une ville.";
-    } else {
-      messageEmail.innerText = "Merci d'entrer des caractères valides.";
+
+    function validationFirstName() {
+      let messageFirstName = document.getElementById("firstNameErrorMsg");
+      if (regexLetters.test(inputFirstName) == true) {
+        messageFirstName.innerText = "Prénom valide.";
+        return true;
+      } else if (inputFirstName == "") {
+        messageFirstName.innerText = "Merci d'entrer un prénom.";
+      } else {
+        messageFirstName.innerText =
+          "Le prénom doit comporter des lettres et des tirets uniquement.";
+      }
+      return false;
     }
-    return false;
-  }
 
-  validationFirstName();
-  validationLastName();
-  validationAddress();
-  validationCity();
-  validationEmail();
-});
-
-/*
-
-// J'envoie la commande
-
-let informationsToOrder = {
-  "contact": {
-    "firstName": inputFirstName,
-    "lastName": inputLastName,
-    "address": inputAddress,
-    "city": inputCity,
-    "email": inputEmail,
-  },
-  "products": [
-
-  ]
-};
-
-let urlOrder = "http://localhost:3000/api/products/order";
-
-let order = {
-  method: 'POST',
-  body: JSON.stringify(informationsToOrder)
-};
-
-// J'envoie les informations à l'API
-
-fetch(urlOrder, order)
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
+    function validationLastName() {
+      let messageLastName = document.getElementById("lastNameErrorMsg");
+      if (regexLetters.test(inputLastName) == true) {
+        messageLastName.innerText = "Nom valide.";
+        return true;
+      } else if (inputLastName == "") {
+        messageLastName.innerText = "Merci d'entrer un nom.";
+      } else {
+        messageLastName.innerText =
+          "Le nom doit comporter des lettres et des tirets uniquement.";
+      }
+      return false;
     }
-    throw new Error(res.statusText);
-    console.log(res);
-  })
 
-*/
+    function validationAddress() {
+      let messageAddress = document.getElementById("addressErrorMsg");
+      if (regexAddress.test(inputAddress) == true) {
+        messageAddress.innerText = "Adresse valide.";
+        return true;
+      } else if (inputAddress == "") {
+        messageAddress.innerText = "Merci d'entrer une adresse.";
+      } else {
+        messageAddress.innerText =
+          "Le nom doit comporter des lettres et des tirets uniquement.";
+      }
+      return false;
+    }
+
+    function validationCity() {
+      let messageCity = document.getElementById("cityErrorMsg");
+      if (regexLetters.test(inputCity) == true) {
+        messageCity.innerText = "Ville valide.";
+        return true;
+      } else if (inputCity == "") {
+        messageCity.innerText = "Merci d'entrer une ville.";
+      } else {
+        messageCity.innerText = "Merci d'entrer des caractères valides.";
+      }
+      return false;
+    }
+
+    function validationEmail() {
+      let messageEmail = document.getElementById("emailErrorMsg");
+      if (regexEmail.test(inputEmail) == true) {
+        messageEmail.innerText = "Email valide.";
+        return true;
+      } else if (inputEmail == "") {
+        messageEmail.innerText = "Merci d'entrer un email.";
+      } else {
+        messageEmail.innerText = "Merci d'entrer des caractères valides.";
+      }
+      return false;
+    }
+
+    const firstNameValide = validationFirstName();
+    const lastNameValide = validationLastName();
+    const addressValide = validationAddress();
+    const cityValide = validationCity();
+    const emailValide = validationEmail();
+
+    // Si toutes les données de mon formulaire sont à true alors je post la requête (je fais mon fetch)
+    // Je créé un objet dans lequel je stocke les informations de mon formulaire et de mes produits mis au panier
+
+    if (
+      firstNameValide == true &&
+      lastNameValide == true &&
+      addressValide == true &&
+      cityValide == true &&
+      emailValide == true
+    ) {
+      let informationsForm = {
+        contact: {
+          firstName: inputFirstName,
+          lastName: inputLastName,
+          address: inputAddress,
+          city: inputCity,
+          email: inputEmail,
+        },
+      };
+
+      let allInformationsToOrder = {
+        params1: informationsForm,
+        params2: productIdToBuy,
+      };
+
+      let orderToSend = {
+        method: "POST",
+        body: JSON.stringify(allInformationsToOrder),
+      };
+    }
+
+    // J'envoie les informations à l'API
+
+    fetch("http://localhost:3000/api/products/order", orderToSend)
+      .then((response) => response.json())
+
+      .then((response) => {
+        // Do something with response.
+      });
+  });
+}

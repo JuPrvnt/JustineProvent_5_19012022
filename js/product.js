@@ -70,11 +70,13 @@ fetch("http://localhost:3000/api/products/" + id)
           });
 
           if (res >= 0) {
-            canapeLocalStorage[res].quantity += parseInt(
-              quantitySelected.value
-            );
-            const canapeDouble = JSON.stringify(canapeLocalStorage);
-            localStorage.setItem("canape", canapeDouble);
+            if (canapeLocalStorage.quantity + quantitySelected < 100) {
+              canapeLocalStorage[res].quantity += parseInt(
+                quantitySelected.value
+              );
+              const canapeDouble = JSON.stringify(canapeLocalStorage);
+              localStorage.setItem("canape", canapeDouble);
+            }
           } else {
             // si je ne trouve pas le même canapé dans le localStorage, j'ajoute quand même ce nouveau canapé
             // Récuperer la variable localstorage actuel et y ajouter le nouveau produit
