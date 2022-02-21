@@ -85,13 +85,15 @@ for (let canape of productInCart) {
       document.querySelectorAll(".itemQuantity").forEach((element, index) => {
         element.addEventListener("change", (e) => {
           e.preventDefault();
-          // Si l'event se passe => la quantité a été modifiée :
-          // récupérer le canape du localStorage qui a la même ID et
-          // remplacer par la nouvelle quantité
           let newQuantity = document.getElementsByClassName("itemQuantity");
-          productInCart[index].quantity = parseInt(newQuantity[index].value);
-          localStorage.setItem("canape", JSON.stringify(productInCart));
-          // J'affiche le total en quantité et en prix
+          if (parseInt(newQuantity[index].value) <= 100) {
+            // Si l'event se passe => la quantité a été modifiée :
+            // récupérer le canape du localStorage qui a la même ID et
+            // remplacer par la nouvelle quantité
+            productInCart[index].quantity = parseInt(newQuantity[index].value);
+            localStorage.setItem("canape", JSON.stringify(productInCart));
+            // J'affiche le total en quantité et en prix
+          }
           displayCart();
         });
       });
