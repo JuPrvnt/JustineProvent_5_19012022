@@ -42,6 +42,8 @@ function displayCart() {
 // Je parcours l’array de mon localStorage
 // Je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
 async function getAllCanape() {
+  productInCart = JSON.parse(localStorage.getItem("canape"));
+
   for (let canape of productInCart) {
     // console.log(canape._id);
     let idProductInCart = canape._id;
@@ -91,18 +93,32 @@ async function getAllCanape() {
 
 function setupClick() {
   // J'ajoute ou supprime des canapés au click sur l'input
-  document.querySelectorAll(".itemQuantity").forEach((element, index) => {
+  document.querySelectorAll(".itemQuantity").forEach((element) => {
     element.addEventListener("change", (e) => {
       e.preventDefault();
-      let newQuantity = document.getElementsByClassName("itemQuantity");
+      productInCart = JSON.parse(localStorage.getItem("canape"));
+      const articleToChange = e.target.closest("article");
+
+      const indexFindedChange = productInCart.findIndex((eleme) => {
+        return (
+          eleme._id === articleToChange.getAttribute("data-id") &&
+          eleme.colors === articleToChange.getAttribute("data-color")
+        );
+      });
+
+      console.log(indexFindedChange);
+      let newQuantity = e.target.value;
+
       if (
-        parseInt(newQuantity[index].value) <= 100 &&
-        parseInt(newQuantity[index].value) > 0
+        parseInt(newQuantity[indexFindedChange]) <= 100 &&
+        parseInt(newQuantity[indexFindedChange]) > 0
       ) {
         // Si l'event se passe => la quantité a été modifiée :
         // récupérer le canape du localStorage qui a la même ID et
         // remplacer par la nouvelle quantité
-        productInCart[index].quantity = parseInt(newQuantity[index].value);
+
+        productInCart[indexFindedChange].quantity = parseInt(newQuantity);
+
         localStorage.setItem("canape", JSON.stringify(productInCart));
         // J'affiche le total en quantité et en prix
       }
@@ -114,18 +130,20 @@ function setupClick() {
   document.querySelectorAll(".deleteItem").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
+      productInCart = JSON.parse(localStorage.getItem("canape"));
+
       const articleToDelete = e.target.closest("article");
       // Si l'event se passe => le click sur "supprimer" :
       // supprimer le canape du localStorage qui a la même ID et
 
-      const indexFinded = productInCart.findIndex((elem) => {
+      const indexFindedDelete = productInCart.findIndex((elem) => {
         return (
           elem._id === articleToDelete.getAttribute("data-id") &&
           elem.colors === articleToDelete.getAttribute("data-color")
         );
       });
 
-      productInCart.splice(indexFinded, 1);
+      productInCart.splice(indexFindedDelete, 1);
       localStorage.setItem("canape", JSON.stringify(productInCart));
       // supprimer le bloc HTML <article> du produit
       articleToDelete.remove();

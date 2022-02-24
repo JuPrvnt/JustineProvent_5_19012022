@@ -117,3 +117,5 @@ fetch("http://localhost:3000/api/products/" + id)
   .catch((error) => {
     console.log(error);
   });
+
+productInCart = JSON.parse(localStorage.getItem("canape"));
