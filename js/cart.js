@@ -6,18 +6,20 @@ let article = document.getElementById("cart__items");
 let productInCart = JSON.parse(localStorage.getItem("canape"));
 // console.log(productInCart);
 
-// Je déclare toutes mes variables
+// Je déclare mes variables
 let displayCanape = "";
 
+// J'affiche la fonction qui m'affiche le produit du localStorage
 getAllCanape();
 
-// Je récupère le localStorage existant et j'ajoute des produits directement depuis la page panier
+// Je définis la fonction qui m'affiche le panier avec le calcul des quantités et €
 function displayCart() {
   let productsInCart = JSON.parse(localStorage.getItem("canape"));
   let priceProductInCart = 0;
   let quantityProductInCart = 0;
   let totalQuantity = document.getElementById("totalQuantity");
   let totalPrice = document.getElementById("totalPrice");
+
   for (let canape of productsInCart) {
     let idProductInCart = canape._id;
     fetch("http://localhost:3000/api/products/" + idProductInCart)
@@ -27,7 +29,8 @@ function displayCart() {
         }
         throw new Error(res.statusText);
       })
-      // Je créé et insére les éléments du localStorage dans la page Panier
+
+      // Ensuite je calcule le total en quantité et en prix
       .then((value) => {
         priceProductInCart = priceProductInCart + value.price * canape.quantity;
         totalPrice.innerHTML = priceProductInCart;
@@ -38,16 +41,12 @@ function displayCart() {
       });
   }
 }
-
-// Je parcours l’array de mon localStorage
-// Je connecte le site à l'API : si j'ai un résultat correspondant, je retourne le résultat de l'API, sinon, message d'erreur
+// Je définis la fonction qui m'affiche le produit du localStorage
 async function getAllCanape() {
   productInCart = JSON.parse(localStorage.getItem("canape"));
 
   for (let canape of productInCart) {
-    // console.log(canape._id);
     let idProductInCart = canape._id;
-    // console.log(idProductInCart);
 
     await fetch("http://localhost:3000/api/products/" + idProductInCart)
       .then((res) => {
@@ -87,86 +86,66 @@ async function getAllCanape() {
         displayCart();
       });
   }
-
+  // J'affiche la fonction qui éxécute les deux événements
+  // (changement de quantité et suppression)
   setupClick();
 }
 
+// Je définis la fonction qui éxécute les deux événements
+// (changement de quantité et suppression)
 function setupClick() {
-  // J'ajoute ou supprime des canapés au click sur l'input
+  // J'ajoute ou supprime des canapés au clic sur l'input
   document.querySelectorAll(".itemQuantity").forEach((element) => {
     element.addEventListener("change", (e) => {
       e.preventDefault();
       productInCart = JSON.parse(localStorage.getItem("canape"));
       const articleToChange = e.target.closest("article");
-
       const indexFindedChange = productInCart.findIndex((eleme) => {
         return (
           eleme._id === articleToChange.getAttribute("data-id") &&
           eleme.colors === articleToChange.getAttribute("data-color")
         );
       });
-
-      console.log(indexFindedChange);
       let newQuantity = e.target.value;
 
-      if (
-        parseInt(newQuantity[indexFindedChange]) <= 100 &&
-        parseInt(newQuantity[indexFindedChange]) > 0
-      ) {
-        // Si l'event se passe => la quantité a été modifiée :
-        // récupérer le canape du localStorage qui a la même ID et
-        // remplacer par la nouvelle quantité
-
+      // Si l'event se passe => la quantité a été modifiée :
+      // récupérer le canape du localStorage qui a la même ID et
+      // remplacer par la nouvelle quantité
+      if (parseInt(newQuantity) <= 100 && parseInt(newQuantity) > 0) {
         productInCart[indexFindedChange].quantity = parseInt(newQuantity);
-
         localStorage.setItem("canape", JSON.stringify(productInCart));
-        // J'affiche le total en quantité et en prix
       }
+      // J'affiche le total en quantité et en prix
       displayCart();
     });
   });
 
-  // Au click du bouton supprimer, je retire le produit du localStorage
+  // Au clic du bouton supprimer, je retire le produit du localStorage
   document.querySelectorAll(".deleteItem").forEach((el) => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
       productInCart = JSON.parse(localStorage.getItem("canape"));
-
       const articleToDelete = e.target.closest("article");
-      // Si l'event se passe => le click sur "supprimer" :
-      // supprimer le canape du localStorage qui a la même ID et
-
       const indexFindedDelete = productInCart.findIndex((elem) => {
         return (
           elem._id === articleToDelete.getAttribute("data-id") &&
           elem.colors === articleToDelete.getAttribute("data-color")
         );
       });
-
       productInCart.splice(indexFindedDelete, 1);
       localStorage.setItem("canape", JSON.stringify(productInCart));
       // supprimer le bloc HTML <article> du produit
       articleToDelete.remove();
-      // recalculer le total de produits et de prix
+      // J'affiche le total en quantité et en prix
       displayCart();
     });
   });
-
-  // Je parcours à nouveau l’array de mon localStorage
-  // une fois les quantités modifiées depuis le panier
-  // Je récupère les ID de ces produits que je stock dans des array
-
-  // console.log(productIdToBuy);
 
   // FORMULAIRE
 
   // Validation des données du formulaire
 
-  // Quand je clique sur le bouton "commander"
-  // si tous mes champs sont remplis
-  // et que les données sont validées
-  // alors, j'envoie mon formulaire
-
+  // Je définis mes regex
   const regexLetters =
     /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽ∂ð ,.'-]+$/u;
   const regexAddress =
@@ -183,6 +162,8 @@ function setupClick() {
     let inputAddress = document.getElementById("address").value;
     let inputCity = document.getElementById("city").value;
     let inputEmail = document.getElementById("email").value;
+
+    // Je défnis mes variables pour valider les données remplis
 
     function validationFirstName() {
       let messageFirstName = document.getElementById("firstNameErrorMsg");
